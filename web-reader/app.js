@@ -6,6 +6,7 @@ let tokenClient;
 let gapiInited = false;
 let gisInited = false;
 let map;
+let userAccessToken;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -15,25 +16,25 @@ function initMap() {
 }
 
 function gisLoaded() {
-    try {
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: CLIENT_ID,
-            scope: SCOPES,
-            callback: (resp) => {
-                if (resp.error) throw resp;
-                handleAuthResponse(resp);
-            },
-        });
-        // Enable the button once initialized
-        document.getElementById('auth_button').disabled = false;
-        console.log("GIS Client Initialized");
-    } catch (err) {
-        console.error("GIS Init Error:", err);
-    }
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
+        callback: (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+                userAccessToken = tokenResponse.access_token; // Store token
+                listSheets(); // Proceed to fetch data
+            }
+        },
+    });
+    console.log("Identity Services Loaded");
 }
 
 function handleAuthClick() {
-    tokenClient.requestAccessToken({ prompt: 'consent' });
+    if (tokenClient) {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+    } else {
+        console.error("Token client not initialized yet.");
+    }
 }
 
 async function handleAuthResponse(response) {
