@@ -1,5 +1,5 @@
-const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
-const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_FROM_URL';
+const CLIENT_ID = '489352124848-fqbhgk8hth6mu2vg9fhn58qoa4uvff6q.apps.googleusercontent.com';
+const SPREADSHEET_ID = '1tkXaQoO7R7YPCsXoNELVf7SsCvkfv2xZ2lN131T-yy4';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
 
 let tokenClient;
