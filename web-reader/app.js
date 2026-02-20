@@ -15,12 +15,21 @@ function initMap() {
 }
 
 function gisLoaded() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: (resp) => { handleAuthResponse(resp); },
-    });
-    gisInited = true;
+    try {
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            callback: (resp) => {
+                if (resp.error) throw resp;
+                handleAuthResponse(resp);
+            },
+        });
+        // Enable the button once initialized
+        document.getElementById('auth_button').disabled = false;
+        console.log("GIS Client Initialized");
+    } catch (err) {
+        console.error("GIS Init Error:", err);
+    }
 }
 
 function handleAuthClick() {
